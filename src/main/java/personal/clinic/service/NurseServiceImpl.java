@@ -9,56 +9,46 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
 import personal.clinic.entity.Clinic;
+import personal.clinic.entity.Doctor;
 import personal.clinic.entity.Nurse;
 import personal.clinic.mapper.NurseMapperImpl;
 import personal.clinic.model.DoctorDTO;
 import personal.clinic.model.NurseDTO;
-import personal.clinic.repository.ClinicRepository;
-import personal.clinic.repository.NurseRepository;
+import personal.clinic.repository.ClinicRepositoryImpl;
+import personal.clinic.repository.NurseRepositoryImpl;
 
 @Service
-public class NurseServiceImpl implements NurseServiceInt {
+public class NurseServiceImpl {
 
-	private final NurseRepository nurseRepo;
+	private final NurseRepositoryImpl nurseRepo;
 	private final NurseMapperImpl nurseMapper;
-	private final ClinicRepository clinicRepo;
+	private final ClinicRepositoryImpl clinicRepo;
 
 	@Autowired
-	public NurseServiceImpl(NurseRepository nurseRepo, NurseMapperImpl nurseMapper, ClinicRepository clinicRepo) {
+	public NurseServiceImpl(NurseRepositoryImpl nurseRepo, NurseMapperImpl nurseMapper, ClinicRepositoryImpl clinicRepo) {
 		this.nurseMapper = nurseMapper;
 		this.nurseRepo = nurseRepo;
 		this.clinicRepo = clinicRepo;
 
 	}
 
-	@Override
 	@Transactional
-	public NurseDTO createNurse(NurseDTO nurseDto) {
+	public NurseDTO createNurse() {
 		// Implement the logic to create a nurse
-
 		Nurse nurse = new Nurse();
-		nurse.setNurseId(nurseDto.getNurseId());
-		nurse.setNurseFirstName(nurseDto.getNurseFirstName());
-		nurse.setNurseLastName(nurseDto.getNurseLastName());
-		nurse.setClinic(nurseDto.getClinicId());
-		nurse.setNurseEmpNum(nurseDto.getNurseEmpNum());
-		nurse.setOverseeing(nurseDto.getOverseeing());
-		// Convert DTO to entity using the mapper
-		nurseMapper.nurseDTOToNurse(nurseDto);
-		// Save to the repository
-		nurseRepo.save(nurse);
+		nurseRepo.createNurse(nurseMapper.nurseToNurseDTO(nurse));
+		nurseRepo.saveAndFlush(nurse);
 
 		// Return the created NurseDTO
-		return nurseDto;
+		return nurseMapper.nurseToNurseDTO(nurse);
 
 	}
 
-	@Override
 	public Set<NurseDTO> getAllNurseByClinicId(Integer clinicId) throws NullPointerException {
 		Set<NurseDTO> nDTO = null;
 		if (clinicId != null) {
 					
-			Clinic c = clinicRepo.getReferenceById(clinicId);
+			Clinic c = clinicRepo.getById(clinicId);
 			c.getNurses();
 			nDTO = nurseMapper.nurseListToListNurseDTO(c.getNurses());
 			return nDTO;
@@ -69,7 +59,6 @@ public class NurseServiceImpl implements NurseServiceInt {
 
 	}
 
-	@Override
 	public Set<DoctorDTO> getSupervisingDoctor(String nurseLicNum) throws EntityNotFoundException {
 		if(nurseLicNum != null) {
 			Set<DoctorDTO> oS = new HashSet<DoctorDTO>();
@@ -84,40 +73,63 @@ public class NurseServiceImpl implements NurseServiceInt {
 	}
 
 	
-	@Override
-	@Transactional
 	public Long getCount() {
 		return nurseRepo.count();
 	}
 
-	@Override
 	@Transactional
-	public NurseDTO getNurseByEmpNum(String nurseEmpNum) {
-		if (nurseEmpNum != null) {
-			Nurse nurse = nurseRepo.getReferenceById(nurseEmpNum);
-			
-			return nurseMapper.nurseToNurseDTO(nurse);
-			
-		}
-		else {
-			throw new EntityNotFoundException("Nurse Employee Number is null or cannot be found.");
-		}
-		
-
-	}
-
-	@Override
-	@Transactional
-	public NurseDTO removeNurseWithEmpNum(String nurseEmpNum) {
-		Nurse nurse = nurseRepo.getReferenceById(nurseEmpNum);
+	public NurseDTO removeNurseWithEmpNum(Integer nurseEmpNum) {
+		Nurse nurse = nurseRepo.getById(nurseEmpNum);
 
 		if (nurseRepo.existsById(nurseEmpNum)) {
 			nurseRepo.delete(nurse);
 			nurseRepo.save(nurse);
+			return nurseMapper.nurseToNurseDTO(nurse);
+		}
+		else {
+			throw new EntityNotFoundException("Nurse with ID " + nurseEmpNum + " does not exist.");
 		}
 
-		return nurseMapper.nurseToNurseDTO(nurse);
 
+	}
+	
+	@Transactional
+	public NurseDTO update(Integer nurseId, Clinic clinic, String firstName,
+			String lastName,
+			Set<Doctor> overseeing) {
+		
+		if(nurseId != null) {
+			Nurse n = nurseRepo.getReferenceById(nurseId);
+			if(clinic != null) {
+				n.setClinic(clinic);
+			}
+			if(firstName != null) {
+				n.setNurseFirstName(firstName);
+			}
+			if(lastName != null)  {
+				n.setNurseLastName(lastName);
+			}
+			if(overseeing != null) {
+				n.setOverseeing(overseeing);
+			}
+			nurseRepo.save(n);
+		
+			return nurseMapper.nurseToNurseDTO(n);
+		}
+		else {
+			throw new EntityNotFoundException("Nurse with ID " + nurseId + " could not be found.");
+		}
+	}
+
+	public NurseDTO find(Integer nurseId) {
+		if (nurseId != null) {
+			Nurse n = nurseRepo.getReferenceById(nurseId);
+			return nurseMapper.nurseToNurseDTO(n);
+			
+		}
+		else { 
+			throw new EntityNotFoundException("Nurse with ID " + nurseId + " could not be found.");
+		}
 	}
 
 }

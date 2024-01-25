@@ -45,7 +45,7 @@ public class ClinicRepositoryImpl implements ClinicRepository{
 	}
 
 	@Override
-	public void deleteAllByIdInBatch(Iterable<String> ids) {
+	public void deleteAllByIdInBatch(Iterable<Integer> ids) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -57,19 +57,19 @@ public class ClinicRepositoryImpl implements ClinicRepository{
 	}
 
 	@Override
-	public Clinic getOne(String id) {
+	public Clinic getOne(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Clinic getById(String id) {
+	public Clinic getById(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Clinic getReferenceById(String id) {
+	public Clinic getReferenceById(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -99,7 +99,7 @@ public class ClinicRepositoryImpl implements ClinicRepository{
 	}
 
 	@Override
-	public List<Clinic> findAllById(Iterable<String> ids) {
+	public List<Clinic> findAllById(Iterable<Integer> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -111,13 +111,13 @@ public class ClinicRepositoryImpl implements ClinicRepository{
 	}
 
 	@Override
-	public Optional<Clinic> findById(String id) {
+	public Optional<Clinic> findById(Integer id) {
 		// TODO Auto-generated method stub
 		return Optional.empty();
 	}
 
 	@Override
-	public boolean existsById(String id) {
+	public boolean existsById(Integer id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -129,7 +129,7 @@ public class ClinicRepositoryImpl implements ClinicRepository{
 	}
 
 	@Override
-	public void deleteById(String id) {
+	public void deleteById(Integer id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -141,7 +141,7 @@ public class ClinicRepositoryImpl implements ClinicRepository{
 	}
 
 	@Override
-	public void deleteAllById(Iterable<? extends String> ids) {
+	public void deleteAllById(Iterable<? extends Integer> ids) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -201,19 +201,7 @@ public class ClinicRepositoryImpl implements ClinicRepository{
 	}
 
 	@Override
-	public Clinic getReferenceById(Integer clinicId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Set<Clinic> count(Set<ClinicDTO> clinicsInZIP) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<Clinic> findAllClinic() {
 		// TODO Auto-generated method stub
 		return null;
 	}

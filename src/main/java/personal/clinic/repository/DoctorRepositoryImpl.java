@@ -44,7 +44,7 @@ public class DoctorRepositoryImpl implements DoctorRepository{
 	}
 
 	@Override
-	public void deleteAllByIdInBatch(Iterable<String> ids) {
+	public void deleteAllByIdInBatch(Iterable<Integer> ids) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -56,19 +56,19 @@ public class DoctorRepositoryImpl implements DoctorRepository{
 	}
 
 	@Override
-	public Doctor getOne(String id) {
+	public Doctor getOne(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Doctor getById(String id) {
+	public Doctor getById(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Doctor getReferenceById(String id) {
+	public Doctor getReferenceById(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -98,7 +98,7 @@ public class DoctorRepositoryImpl implements DoctorRepository{
 	}
 
 	@Override
-	public List<Doctor> findAllById(Iterable<String> ids) {
+	public List<Doctor> findAllById(Iterable<Integer> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -110,13 +110,13 @@ public class DoctorRepositoryImpl implements DoctorRepository{
 	}
 
 	@Override
-	public Optional<Doctor> findById(String id) {
+	public Optional<Doctor> findById(Integer id) {
 		// TODO Auto-generated method stub
 		return Optional.empty();
 	}
 
 	@Override
-	public boolean existsById(String id) {
+	public boolean existsById(Integer id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -128,7 +128,7 @@ public class DoctorRepositoryImpl implements DoctorRepository{
 	}
 
 	@Override
-	public void deleteById(String id) {
+	public void deleteById(Integer id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -140,7 +140,7 @@ public class DoctorRepositoryImpl implements DoctorRepository{
 	}
 
 	@Override
-	public void deleteAllById(Iterable<? extends String> ids) {
+	public void deleteAllById(Iterable<? extends Integer> ids) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -205,4 +205,5 @@ public class DoctorRepositoryImpl implements DoctorRepository{
 		return null;
 	}
 
+	
 }

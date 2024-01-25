@@ -2,11 +2,12 @@ package personal.clinic.mapper;
 
 import java.util.Set;
 
+import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import personal.clinic.entity.Clinic;
 import personal.clinic.model.ClinicDTO;
-
+@Mapper
 public interface ClinicMapper {
 	
 	// caps by suggestion os StackO.

@@ -14,7 +14,6 @@
 // map HTTP request. http://localhost:8080/personalClinic/nurse
 // @RequestMapping("/personalClinic/nurse") ---- class level
 
-
 // GET mapping
 // @GetMapping("/{id}") ---- method level, parameterized
 
@@ -32,12 +31,10 @@
 // Logic to create new book using the DTO. Maybe convert the DTO to 
 // an entity and save it to the database Service}
 
-
 package personal.clinic.controller;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,122 +42,126 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import personal.clinic.entity.Clinic;
-import personal.clinic.entity.Nurse;
+import personal.clinic.entity.Doctor;
 import personal.clinic.model.DoctorDTO;
 import personal.clinic.model.NurseDTO;
-import personal.clinic.repository.ClinicRepositoryImpl;
 import personal.clinic.service.NurseServiceImpl;
+
+
+
 @RestController
 @RequestMapping("/personal-clinic/nurse")
 public class NurseController {
+	
 	@Autowired
 	private NurseServiceImpl nurseService;// declare, but do not instantiate the Service
 											// to a value. The value will be assigned in the
 											// constructor by passing the Service object into
 											// the constructor and assigning it to THIS instance
 											// of the controller.
-	@Autowired
-	private ClinicRepositoryImpl clinicRepo;
-	// autowire the constructor which contains the (autowired) NurseService implementation, which utilizes 
-	// Service repository and the Service interface to provice a response to the controller, which is what the user
-	// is interacting with. Use NurseServiceImpl nurseService to automatically inject both these at once.
+	// autowire the constructor which contains the (autowired) NurseService
+	// implementation, which utilizes
+	// Service repository and the Service interface to provice a response to the
+	// controller, which is what the user
+	// is interacting with. Use NurseServiceImpl nurseService to automatically
+	// inject both these at once.
+
 	@Autowired // constructor level
 	public NurseController(NurseServiceImpl nurseService) {
 		this.nurseService = nurseService; // service handles all business logic. This controller is just going
-		// to send the requests to the controller and provide a DTO response through the endpoint mappings.
-		
+		// to send the requests to the controller and provide a DTO response through the
+		// endpoint mappings.
+
 	}
-	
 	// after Controller constructed with Service now known, create mappings.
 	// the mapping will use the Service object to know which entity is being
 	// worked with.
-	
-	
-	
-	// does ID auto increment????
-	
-	
-	
-	@PostMapping("/create")// HTTP POST
+
+	// does ID auto increment???? yes.
+
+	@PostMapping("/create") // HTTP POST
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public NurseDTO createNurse(@RequestBody NurseDTO nurseDto) {
-		
+	public NurseDTO createNurse() {
+
 		// use the Service method from the global service object
 		// to create the nurse.
 		// the method is origin is NurseService.
-		nurseService.createNurse(nurseDto);
-		
+		return nurseService.createNurse();
+
 		// return a string value of the Dto converted to simple
 		// string.
-		return nurseDto;
-		
+
 	}
-	
+
 	@GetMapping("/view/{nurseId}") // HTTP GET
 	@ResponseStatus(code = HttpStatus.OK)
 	// stack @PathVariable with {} in the mapping. The name of
 	// this variable needs to be the same in the path as it is in
 	// the variable. It also needs to reflect the return type of
 	// getNurseById.
-	public NurseDTO viewNurse(@PathVariable String nurseEmpNum) {
-		NurseDTO nurseDTO = null;
-		if(nurseEmpNum != null) {
-			try { 
-				nurseDTO = nurseService.getNurseByEmpNum(nurseEmpNum);
-			}
-			catch (NullPointerException npe) {
-				System.out.println(npe);
-			}
+	public NurseDTO viewNurse(@PathVariable Integer nurseId) {
+		if (nurseId != null) {
+			return nurseService.find(nurseId);
+		} else {
+			throw new NullPointerException();
 		}
-		return nurseDTO;
 	}
-	
-	
+
 	@GetMapping("/view/all/{clinicId}")
 	@ResponseStatus(code = HttpStatus.OK)
 	public Set<NurseDTO> viewAllNurses(@PathVariable Integer clinicId) {
-		return nurseService.getAllNurseByClinicId(clinicId);
+		if (clinicId != null) {
+			return nurseService.getAllNurseByClinicId(clinicId);
+		} else {
+			throw new NullPointerException();
+		}
 
 	}
-	
+
 	@GetMapping("/{nurseEmpNum}/supervisor")
 	@ResponseStatus(code = HttpStatus.OK)
-	public Set<DoctorDTO> getSupervisingDoctor(@PathVariable String nurseLicNum){
-		
-		return nurseService.getSupervisingDoctor(nurseLicNum);
-		
-	} 
-	
-	
+	public Set<DoctorDTO> getSupervisingDoctor(@PathVariable String nurseId) {
+		if (nurseId != null) {
+			return nurseService.getSupervisingDoctor(nurseId);
+		} else {
+			throw new NullPointerException();
+		}
+	}
+
 	@GetMapping("/total/nurse")
 	@ResponseStatus(code = HttpStatus.OK)
 	public String getCount() {
 		return "Total Num of Nurse: " + nurseService.getCount();
 	}
-	
-	
-	@GetMapping("/secondView/{nurseEmpNum}")
-	@ResponseStatus(code = HttpStatus.OK)
-	public NurseDTO getNurseByEmpNum(@PathVariable String nurseEmpNum) {
-		
-		return nurseService.getNurseByEmpNum(nurseEmpNum);
+
+	@PutMapping("/edit/{nurse_Id}")
+	@ResponseStatus(code = HttpStatus.ACCEPTED)
+	public NurseDTO update(@PathVariable Integer nurseId, @RequestBody Clinic clinic, @RequestBody String firstName,
+			@RequestBody String lastName, @RequestBody String phoneNum, @RequestBody Set<Doctor> overseeing) {
+		if (nurseId != null) {
+			return nurseService.update(nurseId, clinic, phoneNum, phoneNum, overseeing);
+		}
+		else {
+			throw new NullPointerException();
+		}
 	}
-	
+
 	@DeleteMapping("/delete/nurse/{nurseEmpNum}")
 	@ResponseStatus(code = HttpStatus.OK)
-	public NurseDTO removeNurseWithEmpNum(String nurseEmpNum) {
-		
-		return nurseService.removeNurseWithEmpNum(nurseEmpNum);
-
+	public NurseDTO removeNurseWithEmpNum(@PathVariable Integer nurseId) {
+		if(nurseId != null) {
+			return nurseService.removeNurseWithEmpNum(nurseId);
+		}
+		else {
+			throw new NullPointerException();
+		}
 	}
-	
-	
 
 }
-

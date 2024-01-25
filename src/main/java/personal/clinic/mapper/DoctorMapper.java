@@ -2,12 +2,15 @@ package personal.clinic.mapper;
 
 import java.util.Set;
 
+import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import personal.clinic.entity.Doctor;
 import personal.clinic.model.DoctorDTO;
 //the mapper will be used to convert entities to/from DTO. 
 //the mapper is utilized in the Service implementation
+
+@Mapper
 public interface DoctorMapper {
 	
 	// caps by suggestion os StackO.

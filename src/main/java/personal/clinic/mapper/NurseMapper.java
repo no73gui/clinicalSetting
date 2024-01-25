@@ -2,6 +2,7 @@ package personal.clinic.mapper;
 
 import java.util.Set;
 
+import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import personal.clinic.entity.Nurse;
@@ -9,6 +10,8 @@ import personal.clinic.model.NurseDTO;
 
 // the mapper will be used to convert entities to/from DTO. 
 // the mapper is utilized in the Service implementation
+
+@Mapper
 public interface NurseMapper {
 	
 	// caps by suggestion os StackO.

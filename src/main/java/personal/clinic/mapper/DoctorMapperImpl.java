@@ -1,39 +1,47 @@
 package personal.clinic.mapper;
 
+import java.util.HashSet;
 import java.util.Set;
 
-import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
 import personal.clinic.entity.Doctor;
 import personal.clinic.model.DoctorDTO;
 
-@Mapper
 @Component
 public class DoctorMapperImpl implements DoctorMapper {
 
+	
 	@Override
 	public DoctorDTO doctorToDoctorDTO(Doctor doctor) {
-		// TODO Auto-generated method stub
-		return null;
+		DoctorDTO dDTO = new DoctorDTO(doctor);
+		return dDTO;
 	}
 
 	@Override
 	public Doctor doctorDTOToDoctor(DoctorDTO doctorDTO) {
-		// TODO Auto-generated method stub
-		return null;
+		Doctor d = new Doctor(doctorDTO);
+		return d;
 	}
 
 	@Override
 	public Set<DoctorDTO> doctorListToListDoctorDTO(Set<Doctor> listOfDoctor) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<DoctorDTO> sDTO = new HashSet<DoctorDTO>();
+		for (Doctor d : listOfDoctor) {
+			DoctorDTO dDTO = new DoctorDTO(d);
+			sDTO.add(dDTO);
+		}
+		return sDTO;
 	}
 
 	@Override
 	public Set<Doctor> listDoctorDTOtoDoctorList(Set<DoctorDTO> listOfDoctorDTO) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Doctor> sD = new HashSet<Doctor>();
+		for(DoctorDTO dDTO : listOfDoctorDTO) {
+			Doctor d = new Doctor(dDTO);
+			sD.add(d);
+		}
+		return sD;
 	}
 
 }

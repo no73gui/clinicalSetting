@@ -10,7 +10,7 @@ import personal.clinic.model.NurseDTO;
 
 // Repository interface is what will be used for the Service layer to interact with the database. JPA gets CRUD methods.
 
-public interface NurseRepository extends  JpaRepository<Nurse, String>{
+public interface NurseRepository extends  JpaRepository<Nurse, Integer>{
 	
 	Set<DoctorDTO> getSupervisingDoctor(String nurseLicNum);
 

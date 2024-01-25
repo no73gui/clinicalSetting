@@ -43,7 +43,7 @@ public class AdminRepositoryImpl implements AdminRepository{
 	}
 
 	@Override
-	public void deleteAllByIdInBatch(Iterable<String> ids) {
+	public void deleteAllByIdInBatch(Iterable<Integer> ids) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -55,19 +55,19 @@ public class AdminRepositoryImpl implements AdminRepository{
 	}
 
 	@Override
-	public Admin getOne(String id) {
+	public Admin getOne(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Admin getById(String id) {
+	public Admin getById(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Admin getReferenceById(String id) {
+	public Admin getReferenceById(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -97,7 +97,7 @@ public class AdminRepositoryImpl implements AdminRepository{
 	}
 
 	@Override
-	public List<Admin> findAllById(Iterable<String> ids) {
+	public List<Admin> findAllById(Iterable<Integer> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -109,13 +109,13 @@ public class AdminRepositoryImpl implements AdminRepository{
 	}
 
 	@Override
-	public Optional<Admin> findById(String id) {
+	public Optional<Admin> findById(Integer id) {
 		// TODO Auto-generated method stub
 		return Optional.empty();
 	}
 
 	@Override
-	public boolean existsById(String id) {
+	public boolean existsById(Integer id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -127,7 +127,7 @@ public class AdminRepositoryImpl implements AdminRepository{
 	}
 
 	@Override
-	public void deleteById(String id) {
+	public void deleteById(Integer id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -139,7 +139,7 @@ public class AdminRepositoryImpl implements AdminRepository{
 	}
 
 	@Override
-	public void deleteAllById(Iterable<? extends String> ids) {
+	public void deleteAllById(Iterable<? extends Integer> ids) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -197,5 +197,7 @@ public class AdminRepositoryImpl implements AdminRepository{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	
 
 }

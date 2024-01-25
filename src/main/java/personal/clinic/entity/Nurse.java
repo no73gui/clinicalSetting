@@ -5,14 +5,13 @@ package personal.clinic.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.data.annotation.Id;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -22,6 +21,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import personal.clinic.model.NurseDTO;
 
 @Entity
 @Embeddable
@@ -29,10 +29,23 @@ import lombok.ToString;
 @Table(name = "nurse")
 @NoArgsConstructor
 public class Nurse {
+	public Nurse(NurseDTO nDTO) {
+		this.nurseId = nDTO.getNurseId();
+		this.nurseEmpNum = nDTO.getNurseEmpNum();
+		this.nurseFirstName = nDTO.getNurseFirstName();
+		this.nurseLastName = nDTO.getNurseLastName();
+		this.clinic = nDTO.getClinicId();
+		this.overseeing = nDTO.getOverseeing();
+	}
+
+
+
+
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "nurse_id")
-	private String nurseId;
+	private Integer nurseId;
 	
 	@Column(name = "employee_num", nullable = false)
 	private String nurseEmpNum;
@@ -51,8 +64,9 @@ public class Nurse {
 	// that represents the primary key from Clinic
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
+	
 	@ManyToOne
-	@JoinColumn(name = "clinic_id", nullable = false)
+	@JoinColumn(name = "clinic_id", nullable = true)
 	private Clinic clinic;
 
 	
@@ -62,22 +76,12 @@ public class Nurse {
 	// many nurse can be assigned to multiple doctor.
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
+	
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	@JoinTable(name = "nurse_doctor", joinColumns = @JoinColumn(
 			name = "nurse_id"), inverseJoinColumns = @JoinColumn(name = "doctor_id"))
 	private Set<Doctor> overseeing = new HashSet<>();
 	
-	
-	
-	public Nurse(String licNumNurseId, String empNum, String firstName, String lastName, Set<Doctor> leads, Clinic clinic) {
-		this.nurseId = licNumNurseId;
-		this.nurseEmpNum = empNum;
-		this.nurseFirstName = firstName;
-		this.nurseLastName = lastName;
-		this.overseeing = leads;
-		this.clinic = clinic;
-		
-	}
 
 
 }

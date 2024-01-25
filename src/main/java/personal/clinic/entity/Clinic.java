@@ -1,4 +1,5 @@
 
+
 // the entity package contains entities which use JPA and Lombok for entity declaration and getter/setter/constructor generation.
 
 // entities should also contain the domain-specific logic. So, if i want to find total count of nurses, I need a method totalNumNurses(nurses) to retrieve the count of nurses
@@ -11,16 +12,12 @@ package personal.clinic.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.data.annotation.Id;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
+import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -28,12 +25,25 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import personal.clinic.model.ClinicDTO;
 @Embeddable
 @Entity
 @Data
 @Table(name="clinic")
 @NoArgsConstructor
 public class Clinic {
+	public Clinic(ClinicDTO cDTO) {
+		this.clinicName = cDTO.getClinicName();
+		this.clinicState = cDTO.getClinicState();
+		this.clinicStreetAddress = cDTO.getClinicStreetAddress();
+		this.clinicZip = cDTO.getClinicZip();
+		this.nurses = cDTO.getNurses();
+		this.doctors = cDTO.getDoctors();
+		this.administrativeEmployees = cDTO.getAdministrativeEmployees();
+	}
+
+
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "clinic_id")
@@ -58,21 +68,26 @@ public class Clinic {
 	// represents the inverse of relationship with Nurse. 'mappedBy = "clinic"' indicates the owning side of the
 	// relationship is the "clinicId" field in Nurse.
 	
+	
+	
+	
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	@OneToMany(mappedBy = "clinic", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy="clinic")
 	// @JoinTable not needed for OneToMany
 	private Set<Nurse> nurses = new HashSet<>();
 	
 	
+	
+	
 	// each Clinic can have multiple doctors and each doctor can have multiple clinics.
-	@Column(name = "operating_doctors")
+//	@Column(name = "operating_doctors")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	@ManyToMany(mappedBy = "clinic")
-	@JoinTable(name = "clinic_doctor" , joinColumns = @JoinColumn(
-			name="clinic_id"), inverseJoinColumns = @JoinColumn(
-					name = "doctor_id"))
+	@ManyToMany(mappedBy="clinic")
+//	@JoinTable(name = "clinic_doctor" , joinColumns = @JoinColumn(
+//			name="clinic_id"), inverseJoinColumns = @JoinColumn(
+//					name = "doctor_id"))
 	// inverseJoinColumns = @JoinColumn(referencedColumnName = "doctorId"))
 	private Set<Doctor> doctors = new HashSet<>();
 	
@@ -80,10 +95,8 @@ public class Clinic {
 	// each single clinic can have many administrative employees.
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	@OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL)
-	@JoinTable(name = "clinic_admin",joinColumns = @JoinColumn(
-			name = "clinic_id"), inverseJoinColumns = @JoinColumn(
-			name = "admin_id"))
+	
+	@OneToMany(mappedBy = "clinic")
 	private Set<Admin> administrativeEmployees = new HashSet<>();
 	
 	

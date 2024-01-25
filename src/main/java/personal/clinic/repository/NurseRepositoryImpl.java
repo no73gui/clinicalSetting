@@ -19,7 +19,7 @@ import personal.clinic.model.NurseDTO;
 
 @Repository
 @Component
-public class NurseRepositoryImpl implements NurseRepository{
+public class NurseRepositoryImpl implements NurseRepository {
 
 	@Override
 	public void flush() {
@@ -46,7 +46,7 @@ public class NurseRepositoryImpl implements NurseRepository{
 	}
 
 	@Override
-	public void deleteAllByIdInBatch(Iterable<String> ids) {
+	public void deleteAllByIdInBatch(Iterable<Integer> ids) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -58,19 +58,19 @@ public class NurseRepositoryImpl implements NurseRepository{
 	}
 
 	@Override
-	public Nurse getOne(String id) {
+	public Nurse getOne(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Nurse getById(String id) {
+	public Nurse getById(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Nurse getReferenceById(String id) {
+	public Nurse getReferenceById(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -100,7 +100,7 @@ public class NurseRepositoryImpl implements NurseRepository{
 	}
 
 	@Override
-	public List<Nurse> findAllById(Iterable<String> ids) {
+	public List<Nurse> findAllById(Iterable<Integer> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -112,13 +112,13 @@ public class NurseRepositoryImpl implements NurseRepository{
 	}
 
 	@Override
-	public Optional<Nurse> findById(String id) {
+	public Optional<Nurse> findById(Integer id) {
 		// TODO Auto-generated method stub
 		return Optional.empty();
 	}
 
 	@Override
-	public boolean existsById(String id) {
+	public boolean existsById(Integer id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -130,7 +130,7 @@ public class NurseRepositoryImpl implements NurseRepository{
 	}
 
 	@Override
-	public void deleteById(String id) {
+	public void deleteById(Integer id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -142,7 +142,7 @@ public class NurseRepositoryImpl implements NurseRepository{
 	}
 
 	@Override
-	public void deleteAllById(Iterable<? extends String> ids) {
+	public void deleteAllById(Iterable<? extends Integer> ids) {
 		// TODO Auto-generated method stub
 		
 	}
