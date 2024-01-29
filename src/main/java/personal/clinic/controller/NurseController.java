@@ -35,7 +35,6 @@ package personal.clinic.controller;
 
 import java.util.Set;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,6 +47,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.transaction.Transactional;
+import personal.clinic.dao.NurseDAO;
 import personal.clinic.entity.Clinic;
 import personal.clinic.entity.Doctor;
 import personal.clinic.model.DoctorDTO;
@@ -61,7 +62,9 @@ import personal.clinic.service.NurseServiceImpl;
 public class NurseController {
 	
 	@Autowired
-	private NurseServiceImpl nurseService;// declare, but do not instantiate the Service
+	private NurseServiceImpl nurseService;
+	@Autowired
+	private NurseDAO nurseDAO;// declare, but do not instantiate the Service
 											// to a value. The value will be assigned in the
 											// constructor by passing the Service object into
 											// the constructor and assigning it to THIS instance
@@ -74,10 +77,11 @@ public class NurseController {
 	// inject both these at once.
 
 	@Autowired // constructor level
-	public NurseController(NurseServiceImpl nurseService) {
+	public NurseController(NurseServiceImpl nurseService, NurseDAO nurseDOA) {
 		this.nurseService = nurseService; // service handles all business logic. This controller is just going
 		// to send the requests to the controller and provide a DTO response through the
 		// endpoint mappings.
+		this.nurseDAO = nurseDOA;
 
 	}
 	// after Controller constructed with Service now known, create mappings.
@@ -88,12 +92,12 @@ public class NurseController {
 
 	@PostMapping("/create") // HTTP POST
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public NurseDTO createNurse() {
+	public void createNurse(@RequestBody NurseDTO nDTO) {
 
 		// use the Service method from the global service object
 		// to create the nurse.
 		// the method is origin is NurseService.
-		return nurseService.createNurse();
+		nurseService.createNurse(nDTO);
 
 		// return a string value of the Dto converted to simple
 		// string.
@@ -153,11 +157,13 @@ public class NurseController {
 		}
 	}
 
-	@DeleteMapping("/delete/nurse/{nurseEmpNum}")
+	@DeleteMapping("/delete/nurse/{nurseId}")
 	@ResponseStatus(code = HttpStatus.OK)
-	public NurseDTO removeNurseWithEmpNum(@PathVariable Integer nurseId) {
+	@Transactional
+	public void removeNurseWithEmpNum(@PathVariable Integer nurseId) {
 		if(nurseId != null) {
-			return nurseService.removeNurseWithEmpNum(nurseId);
+			nurseDAO.delete(nurseId);
+
 		}
 		else {
 			throw new NullPointerException();

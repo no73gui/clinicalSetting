@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import personal.clinic.dao.ClinicDAOImpl;
 import personal.clinic.entity.Clinic;
 import personal.clinic.mapper.ClinicMapper;
 import personal.clinic.mapper.ClinicMapperImpl;
@@ -21,11 +22,15 @@ public class ClinicServiceImpl {
 	private final ClinicMapper clinicMapper;
 	@Autowired
 	private final ClinicRepositoryImpl clinicRepo;
+	@Autowired
+	private final ClinicDAOImpl clinicDAO;
+	
 	
 	@Autowired
-	public ClinicServiceImpl(ClinicMapperImpl clinicMapper, ClinicRepositoryImpl clinicRepo) {
+	public ClinicServiceImpl(ClinicMapperImpl clinicMapper, ClinicRepositoryImpl clinicRepo, ClinicDAOImpl clinicDAO) {
 	this.clinicMapper = clinicMapper;
 	this.clinicRepo = clinicRepo;
+	this.clinicDAO = clinicDAO;
 
 }
 
@@ -63,7 +68,7 @@ public class ClinicServiceImpl {
 	
 	public ClinicDTO createDTOClinic(ClinicDTO cDTO) {
 			Clinic c = new Clinic(cDTO);
-			clinicRepo.saveAndFlush(c);
+			clinicDAO.create(c);
 			System.out.println("Entered into Service Layer. Create ClinicDTO.");
 			return clinicMapper.clinicToClinicDTO(c);
 		
@@ -71,7 +76,7 @@ public class ClinicServiceImpl {
 	
 	public ClinicDTO createClinic() {
 		Clinic c = new Clinic();
-		clinicRepo.saveAndFlush(c);
+		clinicDAO.create(c);
 		System.out.println("Entered into Service Layer. Create Clinic.");
 		return clinicMapper.clinicToClinicDTO(c);
 	}

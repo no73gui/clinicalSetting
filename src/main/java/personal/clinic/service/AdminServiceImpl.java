@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
+import personal.clinic.dao.AdminDAOImpl;
 import personal.clinic.entity.Admin;
 import personal.clinic.entity.Clinic;
 import personal.clinic.mapper.AdminMapperImpl;
@@ -20,12 +21,15 @@ public class AdminServiceImpl {
 	private final AdminMapperImpl adminMapper;
 	private final AdminRepositoryImpl adminRepo;
 	private final ClinicRepositoryImpl clinicRepo;
+	private final AdminDAOImpl adminDAO;
 	
 	@Autowired
-	public AdminServiceImpl(AdminMapperImpl adminMapper, AdminRepositoryImpl adminRepo, ClinicRepositoryImpl clinicRepo) {
+	public AdminServiceImpl(AdminMapperImpl adminMapper, AdminRepositoryImpl adminRepo, ClinicRepositoryImpl clinicRepo,
+		AdminDAOImpl adminDAO) {
 		this.adminMapper = adminMapper;
 		this.adminRepo = adminRepo;
 		this.clinicRepo = clinicRepo;
+		this.adminDAO = adminDAO;
 	}
 	
 	
@@ -40,17 +44,26 @@ public class AdminServiceImpl {
 	
 	}
 	
-	public AdminDTO createAdmin() {
-		Admin a = new Admin();
-		adminRepo.save(a);
-		return adminMapper.adminToAdminDTO(a);
+	public AdminDTO createAdmin(AdminDTO aDTO) {
+		
+		if(aDTO != null) {
+			Admin a = new Admin(aDTO);
+			adminDAO.create(a);
+			return adminMapper.adminToAdminDTO(a);
+		}
+		else {
+			Admin a = new Admin(aDTO);
+			adminDAO.create(a);
+			return adminMapper.adminToAdminDTO(a);
+		}
+			
 	}
 	
 	
 	
 	public AdminDTO getAdminByRef(Integer adminId) {
 		if(adminId != null) {
-			AdminDTO aDTO = adminMapper.adminToAdminDTO(adminRepo.getById(adminId));
+			AdminDTO aDTO = adminDAO.read(adminId);
 			return aDTO;
 		}
 		else {
@@ -59,11 +72,9 @@ public class AdminServiceImpl {
 		
 	}
 	
-	public AdminDTO removeAdminById(Integer adminId) {
+	public void removeAdminById(Integer adminId) {
 		if(adminId != null) {
-			Admin a = adminRepo.getById(adminId);
-			adminRepo.delete(a);
-			return adminMapper.adminToAdminDTO(a);
+			adminDAO.delete(adminId);
 		}
 		else {
 			throw new EntityNotFoundException("Admin with ID " + adminId + " does not exist.");

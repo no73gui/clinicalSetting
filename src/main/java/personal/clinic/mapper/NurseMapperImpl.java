@@ -19,7 +19,16 @@ public class NurseMapperImpl implements NurseMapper {
 
 	@Override
 	public Nurse nurseDTOToNurse(NurseDTO nurseDTO) {
-		Nurse n = new Nurse(nurseDTO);
+		Nurse n = new Nurse();
+		n.setNurseFirstName(nurseDTO.getNurseFirstName());
+		n.setNurseLastName(nurseDTO.getNurseLastName());
+		n.setNurseEmpNum(nurseDTO.getNurseEmpNum());
+		if(nurseDTO.getClinicId() != null) {
+			n.setClinic(nurseDTO.getClinicId());
+		}
+		if(nurseDTO.getOverseeing() != null) {
+			n.setOverseeing(nurseDTO.getOverseeing());
+		}
 		
 		return n;
 	}

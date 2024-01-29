@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
+import personal.clinic.dao.NurseDAOImpl;
 import personal.clinic.entity.Clinic;
 import personal.clinic.entity.Doctor;
 import personal.clinic.entity.Nurse;
@@ -23,24 +24,35 @@ public class NurseServiceImpl {
 	private final NurseRepositoryImpl nurseRepo;
 	private final NurseMapperImpl nurseMapper;
 	private final ClinicRepositoryImpl clinicRepo;
+	private final NurseDAOImpl nurseDAO;
 
 	@Autowired
-	public NurseServiceImpl(NurseRepositoryImpl nurseRepo, NurseMapperImpl nurseMapper, ClinicRepositoryImpl clinicRepo) {
+	public NurseServiceImpl(NurseRepositoryImpl nurseRepo, NurseMapperImpl nurseMapper, 
+			ClinicRepositoryImpl clinicRepo,
+			NurseDAOImpl nurseDAO) {
 		this.nurseMapper = nurseMapper;
 		this.nurseRepo = nurseRepo;
 		this.clinicRepo = clinicRepo;
-
+		this.nurseDAO = nurseDAO;
 	}
 
 	@Transactional
-	public NurseDTO createNurse() {
+	public String createNurse(NurseDTO nDTO) {
+		System.out.println("createNurse() in NurseServiceImpl reached.");
 		// Implement the logic to create a nurse
-		Nurse nurse = new Nurse();
-		nurseRepo.createNurse(nurseMapper.nurseToNurseDTO(nurse));
-		nurseRepo.saveAndFlush(nurse);
+		if(nDTO != null) {
+			Nurse n = nurseMapper.nurseDTOToNurse(nDTO);
+			
+			nurseDAO.create(n);
+			return "New Nurse Created using DTO.";
+		}
+		else {
+			Nurse n = new Nurse();
+			nurseDAO.create(n);
+			return "Empty Nurse Created.";
+		}
 
 		// Return the created NurseDTO
-		return nurseMapper.nurseToNurseDTO(nurse);
 
 	}
 
@@ -78,18 +90,8 @@ public class NurseServiceImpl {
 	}
 
 	@Transactional
-	public NurseDTO removeNurseWithEmpNum(Integer nurseEmpNum) {
-		Nurse nurse = nurseRepo.getById(nurseEmpNum);
-
-		if (nurseRepo.existsById(nurseEmpNum)) {
-			nurseRepo.delete(nurse);
-			nurseRepo.save(nurse);
-			return nurseMapper.nurseToNurseDTO(nurse);
-		}
-		else {
-			throw new EntityNotFoundException("Nurse with ID " + nurseEmpNum + " does not exist.");
-		}
-
+	public void removeNurseWithEmpNum(Integer nurseEmpNum) {
+		nurseDAO.delete(nurseEmpNum);
 
 	}
 	
@@ -122,14 +124,8 @@ public class NurseServiceImpl {
 	}
 
 	public NurseDTO find(Integer nurseId) {
-		if (nurseId != null) {
-			Nurse n = nurseRepo.getReferenceById(nurseId);
-			return nurseMapper.nurseToNurseDTO(n);
-			
-		}
-		else { 
-			throw new EntityNotFoundException("Nurse with ID " + nurseId + " could not be found.");
-		}
+		NurseDTO n = nurseDAO.read(nurseId);
+		return n;
 	}
 
 }

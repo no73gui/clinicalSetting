@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.transaction.Transactional;
 import personal.clinic.model.AdminDTO;
 import personal.clinic.service.AdminServiceImpl;
 
@@ -32,8 +33,10 @@ public class AdminController {
 	
 	@PostMapping("/create")
 	@ResponseStatus(HttpStatus.CREATED)
-	public AdminDTO createAdmin() {
-		return adminService.createAdmin();
+	@Transactional
+	public AdminDTO createAdmin(@RequestBody AdminDTO aDTO) {
+		
+		return adminService.createAdmin(aDTO);
 	}
 	
 	@GetMapping("/view/all/atClinic/{clinicId}")
@@ -60,9 +63,10 @@ public class AdminController {
 
 	@DeleteMapping("/delete/{adminId}")
 	@ResponseStatus(HttpStatus.OK)
-	public AdminDTO removeAdminById(@PathVariable Integer  adminId) {
+	@Transactional
+	public void removeAdminById(@PathVariable Integer  adminId) {
 		if (adminId != null) {
-			return adminService.removeAdminById(adminId);
+			adminService.removeAdminById(adminId);
 		} else {
 			throw new NullPointerException();
 		}

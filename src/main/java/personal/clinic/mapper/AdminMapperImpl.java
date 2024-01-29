@@ -3,7 +3,6 @@ package personal.clinic.mapper;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
 import personal.clinic.entity.Admin;

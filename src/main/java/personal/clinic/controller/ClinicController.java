@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.transaction.Transactional;
 import personal.clinic.model.ClinicDTO;
 import personal.clinic.service.ClinicServiceImpl;
 
@@ -72,6 +73,7 @@ public class ClinicController {
 
 	@GetMapping("/delete/{clinicId}")
 	@ResponseStatus(HttpStatus.OK)
+	@Transactional
 	public ClinicDTO deleteClinic(@PathVariable Integer clinicId) {
 		if (clinicId != null) {
 			return clinicService.removeClinic(clinicId);

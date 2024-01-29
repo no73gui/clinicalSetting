@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
+import personal.clinic.dao.DoctorDAOImpl;
 import personal.clinic.entity.Doctor;
 import personal.clinic.entity.Nurse;
 import personal.clinic.mapper.DoctorMapperImpl;
@@ -21,14 +22,20 @@ public class DoctorService {
 	private final DoctorMapperImpl docMapper;
 	private final DoctorRepositoryImpl docRepo;
 	private final NurseMapperImpl nurseMapper;
-	
+	private final DoctorDAOImpl doctorDAO;
 	
 	@Autowired
-	public DoctorService(DoctorMapperImpl docMapper, ClinicRepositoryImpl clinicRepo,DoctorRepositoryImpl docRepo, NurseMapperImpl nurseMapper) {
+	public DoctorService(DoctorMapperImpl docMapper, ClinicRepositoryImpl clinicRepo,
+			DoctorRepositoryImpl docRepo,
+			NurseMapperImpl nurseMapper,
+			DoctorDAOImpl doctorDAO) {
 		this.docMapper = docMapper;
 		this.docRepo = docRepo;
 		this.nurseMapper = nurseMapper;
+		this.doctorDAO = doctorDAO;
+	
 	}
+	
 	
 	
 	
@@ -39,8 +46,7 @@ public class DoctorService {
 		// convert DTO to entity, save to DB, convert back to DTO and return to Controller/API
 		Doctor d = new Doctor();
 		// commit transaction
-		docRepo.save(d);
-		
+		doctorDAO.create(d);
 		return docMapper.doctorToDoctorDTO(d);
 	}
 	

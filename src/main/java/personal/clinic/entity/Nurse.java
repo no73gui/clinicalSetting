@@ -47,7 +47,7 @@ public class Nurse {
 	@Column(name = "nurse_id")
 	private Integer nurseId;
 	
-	@Column(name = "employee_num", nullable = false)
+	@Column(name = "employee_num")
 	private String nurseEmpNum;
 	
 	@Column(name = "first_name")
